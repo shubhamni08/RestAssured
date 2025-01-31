@@ -33,27 +33,30 @@ public class Basics {
                 .extract().response().asString();
 
         System.out.println(response);
-
+        System.out.println("-------------------------------------------------");
         JsonPath js = new JsonPath(response);   //for parsing JSON
         String place_id = js.getString("place_id");
         System.out.println(place_id);
-
+        System.out.println("-------------------------------------------------");
+        String newAdd = "23 Street ABc Complex";
         //update place
         given().queryParam("key","qaclick123")
                 .header("content-type","application/json")
                 .body("{\n" +
-                        "   \"place_id\": \" "+place_id+" \" ,\n" +
-                        "   \"address\": \"Mulund East\",\n" +
+                        "   \"place_id\": \""+place_id+"\" ,\n" +
+                        "   \"address\": \""+newAdd+"\",\n" +
                         "   \"key\":\"qaclick123\"\n" +
-                        "}").log().all()
-                .when().put("maps/api/place/update/json")
+                        "}")
+                .log().all()
+                .when()
+                .put("maps/api/place/update/json")
                 .then()
                 .assertThat()
+                .log().all()
                 .statusCode(200)
-                .body("msg",equalTo("Address successfully updated"))
-                .log().all();
+                .body("msg",equalTo("Address successfully updated"));
 
-
+        System.out.println("-------------------------------------------------");
         //get place
         given().queryParam("key","qaclick123")
                 .queryParam("place_id",place_id)
@@ -61,9 +64,9 @@ public class Basics {
                 .log().all()
                 .get("maps/api/place/get/json")
                 .then()
+                .log().all()
                 .assertThat()
                 .statusCode(200)
-                .body("address",equalTo("Mulund East"))
-                .log().all();
+                .body("address",equalTo(newAdd));
     }
 }
