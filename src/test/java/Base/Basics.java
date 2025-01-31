@@ -39,5 +39,8 @@ public class Basics {
                 .statusCode(200)
                 .body("scope",equalTo("APP"))
                 .header("server","Apache/2.4.52 (Ubuntu)");
+
+        //add place (POST method) capture its place_id then update place with new address(PUT method)
+        //Get place (GET method) to validate if new address is present in response.
     }
 }
