@@ -1,6 +1,8 @@
 package Base;
 import static io.restassured.RestAssured.*;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
+
 import static org.hamcrest.Matchers.*;
 
 public class Basics {
@@ -11,21 +13,57 @@ public class Basics {
         //when - submit the API - resource and https methood
         //Then - validate the response
         RestAssured.baseURI = "https://rahulshettyacademy.com";
-        given()
-                .log().all()    //to log input
-                .queryParam("key","qaclick123")
-                .header("content-type","application/json")
-                .body(PayLoad.addPlace())
-                .when()
-                .post("maps/api/place/add/json")
-                .then()
-                .log().all()  //to log all response and see it in output
-                .assertThat()
-                .statusCode(200)
-                .body("scope",equalTo("APP"))
-                .header("server","Apache/2.4.52 (Ubuntu)");
 
         //add place (POST method) capture its place_id then update place with new address(PUT method)
         //Get place (GET method) to validate if new address is present in response.
+
+        //add place
+        String response = given()
+                .queryParam("key","qaclick123")
+                .header("content-type","application/json")
+                .body(PayLoad.addPlace())
+                .log().all()
+                .when()
+                .post("maps/api/place/add/json")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("scope",equalTo("APP"))
+                .header("server","Apache/2.4.52 (Ubuntu)")
+                .extract().response().asString();
+
+        System.out.println(response);
+
+        JsonPath js = new JsonPath(response);   //for parsing JSON
+        String place_id = js.getString("place_id");
+        System.out.println(place_id);
+
+        //update place
+        given().queryParam("key","qaclick123")
+                .header("content-type","application/json")
+                .body("{\n" +
+                        "   \"place_id\": \" "+place_id+" \" ,\n" +
+                        "   \"address\": \"Mulund East\",\n" +
+                        "   \"key\":\"qaclick123\"\n" +
+                        "}").log().all()
+                .when().put("maps/api/place/update/json")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("msg",equalTo("Address successfully updated"))
+                .log().all();
+
+
+        //get place
+        given().queryParam("key","qaclick123")
+                .queryParam("place_id",place_id)
+                .when()
+                .log().all()
+                .get("maps/api/place/get/json")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("address",equalTo("Mulund East"))
+                .log().all();
     }
 }
