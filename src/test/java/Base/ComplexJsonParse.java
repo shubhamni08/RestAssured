@@ -2,8 +2,6 @@ package Base;
 
 import io.restassured.path.json.JsonPath;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class ComplexJsonParse {
@@ -14,30 +12,38 @@ public class ComplexJsonParse {
         System.out.println(js);
 
 //        1. Print No of courses returned by API
-        int courses = js.getInt("courses.size()");
-        System.out.println("No of courses - " + courses);
-
+        int noOfCourses = js.getInt("courses.size()");
+        System.out.println("No of courses - " + noOfCourses);
+        System.out.println("-----------------------------");
 //        2. Print Purchase Amount
         int purchaseAmount = js.getInt("dashboard.purchaseAmount");
         System.out.println("Purchase Amount - " + purchaseAmount);
-
+        System.out.println("-----------------------------");
 //        3. Print Title of the first course
         String firstCourseTitle = js.get("courses[0].title");
         System.out.println("Title of the first course - " + firstCourseTitle);
-
+        System.out.println("-----------------------------");
 //        4. Print All course titles and their respective Prices
         List<String> courseTitles = js.getList("courses.title");
         List<Integer> coursePrices = js.getList("courses.price");
         System.out.println("Print All course titles and their respective Prices - ");
-
+        System.out.println("Using Java8");
         IntStream.range(0, courseTitles.size())
-                .mapToObj(i -> courseTitles.get(i) + " - " + coursePrices.get(i))
-                .forEach(System.out::println);
+                .forEach(i -> System.out.println(courseTitles.get(i) + " - " + coursePrices.get(i)));
 
+        System.out.println("-----------------------------");
+        System.out.println("Using old for loop");
+        for(int i=0;i<courseTitles.size();i++){
+            System.out.println(courseTitles.get(i) +" "+coursePrices.get(i));
+        }
+        System.out.println("-----------------------------");
 //        5. Print no of copies sold by RestAssured Course
-         List<Map<String, Objects>> courseList = js.getList("courses");
-        int copies = js.getInt("courses.find { it.title == 'RestAssured' }.copies");
-        System.out.println("Copies of RestAssured course purchased: " + copies);
+        List<Integer> courseCopies = js.getList("courses.copies");
+        IntStream.range(0, courseTitles.size())
+                .filter(i->courseTitles.get(i).equalsIgnoreCase("RestAssured"))
+                .findFirst()
+                .ifPresent(i->System.out.println("Copies of RestAssured course purchased: " + courseCopies.get(i)));
+        System.out.println("-----------------------------");
 
 
     }
