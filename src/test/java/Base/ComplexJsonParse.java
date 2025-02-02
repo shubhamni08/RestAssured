@@ -45,6 +45,15 @@ public class ComplexJsonParse {
                 .ifPresent(i->System.out.println("Copies of RestAssured course purchased: " + courseCopies.get(i)));
         System.out.println("-----------------------------");
 
-
+//        6. Verify if sum of all courses prices matches with Purchase Amount.
+        int totalAmount = IntStream.range(0,courseTitles.size())
+                .map(i->coursePrices.get(i)*courseCopies.get(i))
+                .sum();
+        System.out.println("sum of all courses prices - "+totalAmount);
+        System.out.println(
+                totalAmount == purchaseAmount
+                        ? "Total amount matches the purchase amount!"
+                        : "Mismatch! Total amount: " + totalAmount + ", Purchase amount: " + purchaseAmount
+        );
     }
 }
