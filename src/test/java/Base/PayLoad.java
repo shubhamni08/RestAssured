@@ -20,4 +20,31 @@ public class PayLoad {
                 "  \"language\": \"french-IN\"\n" +
                 "}";
     }
+
+
+    public static String coursePrice(){
+        return "{\n" +
+                "  \"dashboard\": {\n" +
+                "    \"purchaseAmount\": 910,\n" +
+                "    \"website\": \"www.rahulshettyacademy.com\"\n" +
+                "  },\n" +
+                "  \"courses\": [\n" +
+                "    {\n" +
+                "      \"title\": \"Java\",\n" +
+                "      \"price\": 50,\n" +
+                "      \"copies\": 6\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"title\": \"Selenium\",\n" +
+                "      \"price\": 40,\n" +
+                "      \"copies\": 4\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"title\": \"RestAssured\",\n" +
+                "      \"price\": 45,\n" +
+                "      \"copies\": 10\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+    }
 }
