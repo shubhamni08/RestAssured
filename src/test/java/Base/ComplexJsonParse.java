@@ -1,6 +1,9 @@
 package Base;
 
+import Files.PayLoad;
 import io.restassured.path.json.JsonPath;
+import org.testng.Assert;
+
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -55,5 +58,7 @@ public class ComplexJsonParse {
                         ? "Total amount matches the purchase amount!"
                         : "Mismatch! Total amount: " + totalAmount + ", Purchase amount: " + purchaseAmount
         );
+
+        Assert.assertEquals(totalAmount,purchaseAmount);
     }
 }
